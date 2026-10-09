@@ -1,3 +1,7 @@
 {
-  "enabledMcpjsonServers": ["minimax", "elevenlabs"]
+  "enabledMcpjsonServers": [
+    "gemini",
+    "minimax",
+    "elevenlabs"
+  ]
 }

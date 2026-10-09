@@ -80,17 +80,21 @@ out/                        render output (git-ignored)
 
 ## AI asset generation (MCP servers)
 
-`.mcp.json` connects two MCP servers for Claude Code (run with `uvx`, keys from environment variables):
+`.mcp.json` connects these MCP servers for Claude Code (run with `uvx`, keys from environment variables).
+Prefer `gemini` (the user's Google AI Pro credits pay for it). Use the others only if their key is set.
 
 | Server | Tools | Needs |
 | --- | --- | --- |
+| `gemini` (aio-gemini-mcp 0.5.0) | `generate_image` (Nano Banana), `generate_omni` (video, 3–10 s), `generate_music` (Lyria), `generate_speech` (TTS), `transcribe_audio`, `get_interaction` | `GEMINI_API_KEY`; saves to `GEMINI_OUTPUT_DIR`, which must be absolute |
 | `minimax` | `text_to_image`, `generate_video` + `query_video_generation`, `text_to_audio` (voice), `voice_design`, `voice_clone` | `MINIMAX_API_KEY` (+ `MINIMAX_API_HOST`, default `https://api.minimax.io`; China accounts use `https://api.minimaxi.com`) |
 | `elevenlabs` | `text_to_speech`, `text_to_sound_effects`, `compose_music`, `video_to_music`, voice search/design/clone, `speech_to_text` | `ELEVENLABS_API_KEY` |
 
 - Generated files are written to `public/generated/` (`MCP_OUTPUT_DIR`). Use them with
   `staticFile("generated/<file>")`: `<Img>` for images, `<Video>`/`<Audio>` from `@remotion/media` for clips, voice and music.
 - Rename generated files to descriptive kebab-case names, then reference them.
-- Video generation is asynchronous: call `generate_video`, then poll `query_video_generation` until it finishes.
+- Video generation is slow and asynchronous. With MiniMax, call `generate_video`, then poll `query_video_generation`. With Gemini, call
+  `generate_omni` (it waits up to `timeout_seconds`), or pass `background: true` and poll `get_interaction`. Gemini videos
+  come back as a Google file URI by default: call `get_file` until the file is `ACTIVE`, then `download_file` to save it into `public/generated/`.
 - Every call costs credits on the user's account. Confirm before generating many or long assets, and reuse files that already exist.
 - Sync narration to scenes: measure the file (`ffprobe -show_entries format=duration public/generated/<file>`)
   and size scenes in `timeline.ts`, or read the duration in `calculateMetadata` with Mediabunny

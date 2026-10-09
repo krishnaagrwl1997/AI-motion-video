@@ -13,8 +13,12 @@
   "remoteEnv": {
     "MCP_OUTPUT_DIR": "${containerWorkspaceFolder}/public/generated"
   },
-  // API keys come from Codespaces secrets (github.com/settings/codespaces); none are required to start.
+  // API keys come from Codespaces secrets (github.com/settings/codespaces). All are optional; GEMINI_API_KEY is the main one.
   "secrets": {
+    "GEMINI_API_KEY": {
+      "description": "Google Gemini API key (images, video, music, voice). Create one in Google AI Studio",
+      "documentationUrl": "https://aistudio.google.com/apikey"
+    },
     "MINIMAX_API_KEY": {
       "description": "MiniMax API key for image, video and voice generation",
       "documentationUrl": "https://www.minimax.io/platform/user-center/basic-information/interface-key"

@@ -16,28 +16,32 @@ set up for working with AI coding agents.
 
 ## AI generation: images, video, voice, music, 3D
 
-The project connects AI-generation tools (MCP servers) to **Claude Code**:
+Claude Code in this project is connected to AI-generation tools (MCP servers, see `.mcp.json`).
+Everything they create is saved to `public/generated/`.
 
-- **MiniMax**: images, video, voices
-- **ElevenLabs**: voices, sound effects, music
-- **Blender**: 3D, on your own computer
+| Tool | Makes | Key (Codespaces secret) |
+| --- | --- | --- |
+| **Gemini** (main) | images (Nano Banana), video, music (Lyria), voice | `GEMINI_API_KEY` |
+| MiniMax (optional) | images, video, voice | `MINIMAX_API_KEY` |
+| ElevenLabs (optional) | voice, sound effects, music | `ELEVENLABS_API_KEY` |
+| Blender (own computer only) | 3D scenes | none |
 
-Generated files are saved to `public/generated/`.
+**Set up Gemini once (uses the $10/month developer credits included with Google AI Pro):**
+1. Turn on your credits: https://developers.google.com/program/plans-and-pricing (sign in with your Google AI Pro account).
+2. Create an API key: https://aistudio.google.com/apikey. Make sure the key's project uses the billing account that
+   holds the credits. Image, video and music generation are not included in Google's free API tier.
+3. Go to https://github.com/settings/codespaces, click **New secret**, name it `GEMINI_API_KEY`, paste the key,
+   and give it access to this repository.
+4. Create a new codespace (or restart an existing one) so it picks up the secret.
 
-**Set up once:**
-1. Create accounts and copy your API keys:
-   - MiniMax: https://www.minimax.io/platform/user-center/basic-information/interface-key
-   - ElevenLabs: https://elevenlabs.io/app/settings/api-keys
-2. Go to https://github.com/settings/codespaces, then **New secret**. Add `MINIMAX_API_KEY` and `ELEVENLABS_API_KEY`,
-   and give each access to this repository.
-3. Create a **new** codespace (or restart an existing one) so it picks up the secrets.
+**Use it:** in the codespace, click the **Claude** icon (or type `claude` in a terminal). Sign in, then answer **Yes** to
+trust the folder and enable the MCP servers. Then ask, for example: *"Generate a neon city background image and a
+10-second synthwave track with Gemini, and use them in the Showcase intro."*
 
-**Use them:**
-1. In the codespace, click the **Claude** icon in the sidebar, or type `claude` in a new terminal.
-2. Sign in, and answer **Yes** when asked to trust the folder and enable the project's MCP servers.
-3. Ask, for example: *"Generate a 10-second upbeat background track and a voiceover saying 'Welcome', then add both to the Showcase video."*
+**No API key? Add files by hand:** create the image, video or music in the Gemini or ChatGPT app, download it, drag it into
+`public/generated/` in the file list, and tell Claude to use `generated/<file name>`.
 
-**Blender (3D):** this only works on your own computer with Blender installed. Run
+**Blender (3D):** only works on your own computer with Blender installed. Run
 `curl -LsSf https://www.mcp-for-blender.com/install.sh | sh` (macOS/Linux) or
 `powershell -ExecutionPolicy ByPass -c "irm https://www.mcp-for-blender.com/install.ps1 | iex"` (Windows),
 then reopen Claude and Blender.

@@ -8,8 +8,9 @@ sudo apt-get update
 sudo apt-get install -y libnss3 libdbus-1-3 libatk1.0-0 libasound2 libxrandr2 libxkbcommon-dev \
   libxfixes3 libxcomposite1 libxdamage1 libgbm-dev libcups2 libcairo2 libpango-1.0-0 libatk-bridge2.0-0
 
-# 2. uv / uvx, which runs the AI-generation MCP servers in .mcp.json
+# 2. uv / uvx, which runs the AI-generation MCP servers in .mcp.json (and fetches the Python they need)
 curl -LsSf https://astral.sh/uv/install.sh | sudo env UV_UNMANAGED_INSTALL=/usr/local/bin sh
+uv python install 3.14 || true
 
 # 3. Project dependencies
 npm i

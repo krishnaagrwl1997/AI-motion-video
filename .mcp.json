@@ -1,8 +1,21 @@
 {
   "mcpServers": {
+    "gemini": {
+      "command": "uvx",
+      "args": [
+        "aio-gemini-mcp@0.5.0"
+      ],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}",
+        "GEMINI_OUTPUT_DIR": "${MCP_OUTPUT_DIR}"
+      }
+    },
     "minimax": {
       "command": "uvx",
-      "args": ["minimax-mcp", "-y"],
+      "args": [
+        "minimax-mcp",
+        "-y"
+      ],
       "env": {
         "MINIMAX_API_KEY": "${MINIMAX_API_KEY}",
         "MINIMAX_API_HOST": "${MINIMAX_API_HOST:-https://api.minimax.io}",
@@ -12,7 +25,9 @@
     },
     "elevenlabs": {
       "command": "uvx",
-      "args": ["elevenlabs-mcp"],
+      "args": [
+        "elevenlabs-mcp"
+      ],
       "env": {
         "ELEVENLABS_API_KEY": "${ELEVENLABS_API_KEY}",
         "ELEVENLABS_MCP_BASE_PATH": "${MCP_OUTPUT_DIR:-public/generated}",
