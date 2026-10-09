@@ -14,31 +14,33 @@ set up for working with AI coding agents.
 3. Remotion Studio opens in a new browser tab. If it doesn't, open the **Ports** tab at the bottom
    and click the globe icon next to port **3000**.
 
-## AI generation: images, video, voice, music, 3D
+## AI generation: images, video, voice, music, 3D (free tools)
 
-Claude Code in this project is connected to AI-generation tools (MCP servers, see `.mcp.json`).
+Claude Code in this project is connected to free AI-generation tools (MCP servers, see `.mcp.json`).
 Everything they create is saved to `public/generated/`.
 
-| Tool | Makes | Key (Codespaces secret) |
+| Tool | Makes | What you need (all free) |
 | --- | --- | --- |
-| **Gemini** (main) | images (Nano Banana), video, music (Lyria), voice | `GEMINI_API_KEY` |
-| MiniMax (optional) | images, video, voice | `MINIMAX_API_KEY` |
-| ElevenLabs (optional) | voice, sound effects, music | `ELEVENLABS_API_KEY` |
-| Blender (own computer only) | 3D scenes | none |
+| **Pollinations** | images | nothing, works right away (slower, about 1 image per 15 s) |
+| **Hugging Face** | images, short videos, music (via free community "Spaces") | free account + token → secret `HF_TOKEN` |
+| **Gemini** | voiceovers (free tier). Images, video and music need billing | free key from AI Studio → secret `GEMINI_API_KEY` |
+| **ElevenLabs** | voices, sound effects (10,000 free credits/month, non-commercial) | free account + key → secret `ELEVENLABS_API_KEY` |
+| **Blender** | 3D scenes, on your own computer only | Blender installed |
 
-**Set up Gemini once (uses the $10/month developer credits included with Google AI Pro):**
-1. Turn on your credits: https://developers.google.com/program/plans-and-pricing (sign in with your Google AI Pro account).
-2. Create an API key: https://aistudio.google.com/apikey. Make sure the key's project uses the billing account that
-   holds the credits. Image, video and music generation are not included in Google's free API tier.
-3. Go to https://github.com/settings/codespaces, click **New secret**, name it `GEMINI_API_KEY`, paste the key,
-   and give it access to this repository.
-4. Create a new codespace (or restart an existing one) so it picks up the secret.
+**Add a key (do this for each tool you want):** go to https://github.com/settings/codespaces, click **New secret**,
+use the name from the table, paste the key, and give it access to this repository. Then create a new codespace
+(or restart the existing one).
+
+- Hugging Face token: https://huggingface.co/settings/tokens (create a token with "Read" access).
+  Choose which free image, video and music Spaces Claude can use at https://huggingface.co/settings/mcp.
+- Gemini key: https://aistudio.google.com/apikey
+- ElevenLabs key: https://elevenlabs.io/app/settings/api-keys
 
 **Use it:** in the codespace, click the **Claude** icon (or type `claude` in a terminal). Sign in, then answer **Yes** to
-trust the folder and enable the MCP servers. Then ask, for example: *"Generate a neon city background image and a
-10-second synthwave track with Gemini, and use them in the Showcase intro."*
+trust the folder and enable the MCP servers. Then ask, for example: *"Generate a neon city background with Pollinations and
+a voiceover saying 'Welcome' with Gemini, and use them in the Showcase intro."*
 
-**No API key? Add files by hand:** create the image, video or music in the Gemini or ChatGPT app, download it, drag it into
+**Or add files by hand:** create images or videos in the Gemini or ChatGPT app, download them, drag them into
 `public/generated/` in the file list, and tell Claude to use `generated/<file name>`.
 
 **Blender (3D):** only works on your own computer with Blender installed. Run

@@ -16,5 +16,4 @@ uv python install 3.14 || true
 npm i
 
 # 4. Pre-download the MCP servers so the first use is fast (failures here are not fatal)
-uvx minimax-mcp --help >/dev/null 2>&1 || true
 uvx elevenlabs-mcp --help >/dev/null 2>&1 || true

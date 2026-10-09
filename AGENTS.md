@@ -80,22 +80,22 @@ out/                        render output (git-ignored)
 
 ## AI asset generation (MCP servers)
 
-`.mcp.json` connects these MCP servers for Claude Code (run with `uvx`, keys from environment variables).
-Prefer `gemini` (the user's Google AI Pro credits pay for it). Use the others only if their key is set.
+`.mcp.json` connects these free MCP servers for Claude Code. Keys come from environment variables (Codespaces secrets).
+A server whose key is missing will fail to connect; ignore it and use another.
 
-| Server | Tools | Needs |
-| --- | --- | --- |
-| `gemini` (aio-gemini-mcp 0.5.0) | `generate_image` (Nano Banana), `generate_omni` (video, 3–10 s), `generate_music` (Lyria), `generate_speech` (TTS), `transcribe_audio`, `get_interaction` | `GEMINI_API_KEY`; saves to `GEMINI_OUTPUT_DIR`, which must be absolute |
-| `minimax` | `text_to_image`, `generate_video` + `query_video_generation`, `text_to_audio` (voice), `voice_design`, `voice_clone` | `MINIMAX_API_KEY` (+ `MINIMAX_API_HOST`, default `https://api.minimax.io`; China accounts use `https://api.minimaxi.com`) |
-| `elevenlabs` | `text_to_speech`, `text_to_sound_effects`, `compose_music`, `video_to_music`, voice search/design/clone, `speech_to_text` | `ELEVENLABS_API_KEY` |
+| Server | Use for | Tools | Needs |
+| --- | --- | --- | --- |
+| `pollinations` (@pinkpixel/mcpollinations 1.3.1) | images (default choice) | `generateImage` (saves file; defaults 1920×1080), `editImage`, `generateImageFromReference`, `listImageModels`, `respondAudio` (TTS) | nothing (`POLLINATIONS_TOKEN` optional). Anonymous use is rate-limited (~1 request / 15 s) and may add a watermark |
+| `huggingface` (official, remote) | images, short video, music via Gradio Spaces | Hub/Space search plus the Spaces the user enabled at huggingface.co/settings/mcp | `HF_TOKEN` (free; GPU Spaces use a daily free ZeroGPU quota) |
+| `gemini` (aio-gemini-mcp 0.5.0) | voiceover | `generate_speech` (free tier), `transcribe_audio`. `generate_image`, `generate_omni` (video) and `generate_music` need a billed key and fail on the free tier | `GEMINI_API_KEY`; saves to `GEMINI_OUTPUT_DIR`, which must be absolute |
+| `elevenlabs` (official) | voices, sound effects | `text_to_speech`, `text_to_sound_effects`, voice search/design. `compose_music` needs a paid plan | `ELEVENLABS_API_KEY` (free plan: 10k credits/month, non-commercial) |
 
 - Generated files are written to `public/generated/` (`MCP_OUTPUT_DIR`). Use them with
   `staticFile("generated/<file>")`: `<Img>` for images, `<Video>`/`<Audio>` from `@remotion/media` for clips, voice and music.
 - Rename generated files to descriptive kebab-case names, then reference them.
-- Video generation is slow and asynchronous. With MiniMax, call `generate_video`, then poll `query_video_generation`. With Gemini, call
-  `generate_omni` (it waits up to `timeout_seconds`), or pass `background: true` and poll `get_interaction`. Gemini videos
-  come back as a Google file URI by default: call `get_file` until the file is `ACTIVE`, then `download_file` to save it into `public/generated/`.
-- Every call costs credits on the user's account. Confirm before generating many or long assets, and reuse files that already exist.
+- Hugging Face Space tools return file URLs. Download them into `public/generated/` (e.g. with `curl -L -o`) before using them.
+- Prefer building motion with Remotion itself (shapes, type, transitions). Use generated media for backgrounds, textures, voice and music.
+- Free tiers have tight quotas. Generate only what the video needs, and reuse files that already exist in `public/generated/`.
 - Sync narration to scenes: measure the file (`ffprobe -show_entries format=duration public/generated/<file>`)
   and size scenes in `timeline.ts`, or read the duration in `calculateMetadata` with Mediabunny
   (https://www.remotion.dev/docs/mediabunny/metadata).
