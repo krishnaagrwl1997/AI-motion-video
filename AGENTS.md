@@ -57,6 +57,7 @@ src/
     _template/Template.tsx  copied by `npm run new`
 public/                     static assets, referenced with staticFile("…")
   audio/  fonts/  images/  video/
+  generated/                files created by the AI-generation MCP servers
 scripts/new-composition.mjs scaffolder used by `npm run new`
 out/                        render output (git-ignored)
 ```
@@ -76,6 +77,26 @@ out/                        render output (git-ignored)
 - Media: `<Audio>`/`<Video>` from `@remotion/media`; images with `<Img>` from `remotion`.
 - Keep `defaultProps` in `Root.tsx` as inline object literals so Studio can save prop edits.
 - Every `<Composition id>` must be unique and use only letters, numbers and `-`.
+
+## AI asset generation (MCP servers)
+
+`.mcp.json` connects two MCP servers for Claude Code (run with `uvx`, keys from environment variables):
+
+| Server | Tools | Needs |
+| --- | --- | --- |
+| `minimax` | `text_to_image`, `generate_video` + `query_video_generation`, `text_to_audio` (voice), `voice_design`, `voice_clone` | `MINIMAX_API_KEY` (+ `MINIMAX_API_HOST`, default `https://api.minimax.io`; China accounts use `https://api.minimaxi.com`) |
+| `elevenlabs` | `text_to_speech`, `text_to_sound_effects`, `compose_music`, `video_to_music`, voice search/design/clone, `speech_to_text` | `ELEVENLABS_API_KEY` |
+
+- Generated files are written to `public/generated/` (`MCP_OUTPUT_DIR`). Use them with
+  `staticFile("generated/<file>")`: `<Img>` for images, `<Video>`/`<Audio>` from `@remotion/media` for clips, voice and music.
+- Rename generated files to descriptive kebab-case names, then reference them.
+- Video generation is asynchronous: call `generate_video`, then poll `query_video_generation` until it finishes.
+- Every call costs credits on the user's account. Confirm before generating many or long assets, and reuse files that already exist.
+- Sync narration to scenes: measure the file (`ffprobe -show_entries format=duration public/generated/<file>`)
+  and size scenes in `timeline.ts`, or read the duration in `calculateMetadata` with Mediabunny
+  (https://www.remotion.dev/docs/mediabunny/metadata).
+- **Blender** (3D) runs only on the user's own computer with Blender open: `uvx mcp-for-blender setup`
+  configures Claude Code and installs the add-on. Render from Blender to PNG sequences or MP4 files and place them in `public/`.
 
 ## Changing resolution, frame rate, duration
 
