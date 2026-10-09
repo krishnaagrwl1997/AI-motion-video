@@ -7,6 +7,13 @@ set up for working with AI coding agents.
 - `.agents/skills/` (and `.claude/skills/`): Remotion's official Agent Skills.
 - `src/compositions/Showcase`: a polished 1920×1080 / 30 fps sample (≈12 s, 4 scenes, transitions, audio).
 
+## Easiest way to open Remotion Studio (nothing to install)
+
+1. On this repo's GitHub page, click the green **Code** button → **Codespaces** tab → **Create codespace**.
+2. Wait a few minutes while it sets up (first time only).
+3. Remotion Studio opens in a new browser tab. If it doesn't, open the **Ports** tab at the bottom
+   and click the globe icon next to port **3000**.
+
 ## Requirements
 
 - Node.js 16+ (Remotion 4 minimum; tested with Node 22) and npm
